@@ -6,6 +6,7 @@ import os
 import cv2
 from tqdm import tqdm
 import numpy as np
+import config as cfg
 import onnxruntime
 from time import time
 
@@ -17,11 +18,11 @@ from onnx_infer_utils import mkdir, multiclass_nms, vis
 
 
 class onnx_infer():
-    def __init__(self):
-        self.input_shape = (576, 768)  # h, w
-        self.model = '/home/ecnu-lzw/bwz/ocr-gy/YOLOX_inference/onnx_models/yolox_s2023.onnx'
-        self.score_thr = 0.3
-        self.output_dir = '/home/ecnu-lzw/bwz/ocr-gy/YOLOX_inference/onnx_outputs'
+    def __init__(self, cfg):
+        self.input_shape = cfg.input_shape  # h, w
+        self.model = cfg.model
+        self.score_thr = cfg.score_thr
+        self.output_dir = cfg.output_dir
         # --------------------init session------------------------
         self.session = onnxruntime.InferenceSession(self.model)
 
@@ -58,11 +59,11 @@ class onnx_infer():
 if __name__ == '__main__':
     image_path = '/home/ecnu-lzw/bwz/ocr-gy/steelDatasets/datasets_img/2019_2019-10-26103539.jpg'
 
-    img_num = 5
-    vis_out = False
+    img_num = 1
+    vis_out = True
     tick = time()
     origin_img = cv2.imread(image_path)  # 0.1566s
-    of_wp = onnx_infer()  # 0.822s
+    of_wp = onnx_infer(cfg)  # 0.822s
     for _ in tqdm(range(img_num)):
         xywh_boxes, scores, ratio = of_wp.infer(origin_img)  # 0.016s
         tick1 = time()
