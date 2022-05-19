@@ -18,7 +18,7 @@ from onnx_infer_utils import mkdir, multiclass_nms, vis
 
 
 class onnx_infer():
-    def __init__(self, cfg):
+    def __init__(self):
         self.input_shape = cfg.input_shape  # h, w
         self.model = cfg.model
         self.score_thr = cfg.score_thr
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     vis_out = True
     tick = time()
     origin_img = cv2.imread(image_path)  # 0.1566s
-    of_wp = onnx_infer(cfg)  # 0.822s
+    of_wp = onnx_infer()  # 0.822s
     for _ in tqdm(range(img_num)):
         xywh_boxes, scores, ratio = of_wp.infer(origin_img)  # 0.016s
         tick1 = time()
